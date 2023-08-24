@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-
-public class LRUCache<TKey, TValue>
-{
-    private readonly int capacity;
-    private Dictionary<TKey, LinkedListNode<CacheItem>> cache;
-    private LinkedList<CacheItem> lruList;
-
-    public LRUCache(int capacity)
+public TValue Get(TKey key)
     {
-        this.capacity = capacity;
-        this.cache = new Dictionary<TKey, LinkedListNode<CacheItem>>(capacity);
-        this.lruList = new LinkedList<CacheItem>();
+        if (cache.TryGetValue(key, out LinkedListNode<CacheItem> node))
+        {
+            TValue value = node.Value.Value;
+            lruList.Remove(node);
+            lruList.AddLast(node);
+            return value;
+        }
+        return default(TValue);
     }
